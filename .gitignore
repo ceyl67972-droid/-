@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 运行时数据（含真实流水，禁止提交）
+.ocr_cache/
+web_jobs/
+desktop_app.log
+*_核对结果.xlsx
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

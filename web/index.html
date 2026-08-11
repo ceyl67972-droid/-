@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>流水核对</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script src="/assets/lucide.min.js" defer></script>
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark"><i data-lucide="landmark"></i></div>
+    <div class="brand-copy"><strong>流水核对</strong><span>银行对账单与序时账</span></div>
+    <div class="local-status"><span></span>桌面版</div>
+  </header>
+
+  <main class="workspace">
+    <section class="setup-panel" aria-labelledby="setup-title">
+      <div class="section-heading">
+        <div><span class="step-label">01 / 文件</span><h1 id="setup-title">准备核对材料</h1></div>
+        <button class="icon-button" id="clear-button" type="button" title="清空已选文件"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+
+      <div class="file-field">
+        <div class="field-label"><span>序时账</span><small>仅支持 XLSX</small></div>
+        <label class="file-picker" for="excel-input"><i data-lucide="sheet"></i><span id="excel-label">选择一份序时账</span><b>浏览</b></label>
+        <input id="excel-input" type="file" accept=".xlsx" hidden>
+      </div>
+
+      <div class="file-field pdf-field">
+        <div class="field-label"><span>银行对账单</span><small id="pdf-count">0 份 PDF</small></div>
+        <label class="drop-zone" id="drop-zone" for="pdf-input">
+          <i data-lucide="files"></i><strong>选择或拖入对账单</strong><span>支持多银行、多文件和扫描版 PDF</span>
+        </label>
+        <input id="pdf-input" type="file" accept=".pdf" multiple hidden>
+        <div class="file-list" id="pdf-list"></div>
+      </div>
+
+      <div class="settings-band">
+        <div class="setting-copy"><i data-lucide="calendar-range"></i><div><span>日期容差</span><small>借贷方向存在时优先校验</small></div></div>
+        <div class="number-control">
+          <button type="button" id="decrease-tolerance" title="减少一天"><i data-lucide="minus"></i></button>
+          <input id="tolerance" type="number" min="0" max="366" value="62" aria-label="日期容差天数"><span>天</span>
+          <button type="button" id="increase-tolerance" title="增加一天"><i data-lucide="plus"></i></button>
+        </div>
+      </div>
+
+      <button class="primary-button" id="run-button" type="button" disabled><i data-lucide="play"></i><span>开始核对</span></button>
+      <p class="privacy-note"><i data-lucide="shield-check"></i>文件全程在本机处理，不经过外网</p>
+    </section>
+
+    <section class="activity-panel" aria-labelledby="activity-title">
+      <div class="section-heading">
+        <div><span class="step-label">02 / 任务</span><h2 id="activity-title">处理状态</h2></div>
+        <span class="status-badge idle" id="status-badge">等待文件</span>
+      </div>
+
+      <div class="empty-state" id="empty-state">
+        <div class="empty-visual"><i data-lucide="scan-search"></i></div><strong>尚未开始核对</strong><span>结果统计和 OCR 进度将在这里显示</span>
+      </div>
+
+      <div class="running-state hidden" id="running-state">
+        <div class="progress-header"><div><strong id="progress-title">正在准备文件</strong><span id="elapsed-time">00:00</span></div><div class="spinner"></div></div>
+        <div class="progress-track"><span></span></div><div class="log-window" id="log-window" aria-live="polite"></div>
+      </div>
+
+      <div class="result-state hidden" id="result-state">
+        <div class="result-banner"><i data-lucide="circle-check-big"></i><div><strong>核对完成</strong><span id="result-name">结果文件已生成</span></div></div>
+        <div class="metrics">
+          <div><span>PDF 流水</span><strong id="statement-count">0</strong></div><div><span>精确匹配</span><strong id="exact-count">0</strong></div>
+          <div><span>容差匹配</span><strong id="tolerance-count">0</strong></div><div><span>未匹配记录</span><strong id="unmatched-count">0</strong></div>
+        </div>
+        <div class="result-warnings" id="result-warnings"></div>
+        <a class="download-button" id="download-button" href="#"><i data-lucide="save"></i><span>保存核对结果</span></a>
+        <p class="save-note" id="save-note"></p>
+      </div>
+
+      <div class="error-state hidden" id="error-state"><i data-lucide="circle-alert"></i><div><strong>核对失败</strong><span id="error-message"></span></div></div>
+    </section>
+  </main>
+</body>
+</html>
